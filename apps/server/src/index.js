@@ -2,6 +2,29 @@ const cors = require("cors");
 const express = require("express");
 const api = express.Router();
 
+const tasks = [
+    {
+        id: 0,
+        title: "Ali Sadeghi",
+        done: true,
+        createdAt: Date.now(),
+    },
+    {
+        id: 1,
+        title: "Learn Vite",
+        done: false,
+        createdAt: Date.now(),
+    },
+    {
+        id: 2,
+        title: "Some Random Task",
+        done: false,
+        createdAt: Date.now(),
+    },
+];
+
+let idValue = 3;
+
 const createApp = (corsOrigin) => {
     const app = express();
 
@@ -42,6 +65,71 @@ const createApp = (corsOrigin) => {
                 ok: true,
                 text: `Hello ${data}`,
                 error: "",
+            });
+        }
+    });
+
+    // Tasks
+
+    api.get("/tasks", (_req, res) => {
+        console.log("server >> get tasks...");
+
+        res.status(200).json({ tasks, ok: true });
+    });
+
+    api.post("/tasks", (req, res) => {
+        console.log("server >> post tasks...");
+
+        const { title } = req.body;
+
+        if (!title) {
+            res.status(400).json({
+                ok: false,
+                message: "No Title dude!",
+            });
+        } else {
+            tasks.push({
+                id: idValue++,
+                title,
+                done: false,
+                createdAt: Date.now(),
+            });
+
+            res.status(200).json({
+                ok: true,
+                message: "Data Added!",
+                tasks: tasks,
+            });
+        }
+    });
+
+    api.get("/tasks/:id", (req, res) => {
+        console.log("server >> get task by id...");
+
+        const { id } = req.params;
+
+        // console.log("id >> ", id);
+
+        if (!id) {
+            res.status(400).json({ ok: false, message: "id is broken sir" });
+        }
+
+        const selectedTask = tasks.find((t) => t.id === Number(id - 1));
+
+        console.log("selectedTask >> ", !!selectedTask);
+
+        if (selectedTask) {
+            res.status(200).json({
+                ok: true,
+                task: selectedTask,
+                findTask: true,
+            });
+        } else {
+            res.status(404).json({
+                ok: true,
+                task: "",
+                findTask: false,
+                message: "Task not found :(",
             });
         }
     });
