@@ -1,5 +1,6 @@
 const cors = require("cors");
 const express = require("express");
+const api = express.Router();
 
 const createApp = (corsOrigin) => {
     const app = express();
@@ -10,8 +11,9 @@ const createApp = (corsOrigin) => {
             origin: corsOrigin,
         })
     );
+    app.use("/api", api);
 
-    app.get("/api/health", (_req, res) => {
+    api.get("/health", (_req, res) => {
         res.status(200).json({
             ok: true,
             service: "learning-vite-server",
@@ -19,11 +21,29 @@ const createApp = (corsOrigin) => {
         });
     });
 
-    app.get("/test-get", (_req, res) => {
+    api.get("/test-get", (_req, res) => {
         res.status(200).json({
             ok: true,
             test: "pass",
         });
+    });
+
+    api.post("/test-post", (req, res) => {
+        const { data } = req.body;
+
+        if (!data) {
+            res.status(500).json({
+                ok: false,
+                text: "",
+                error: "gime input!",
+            });
+        } else {
+            res.status(200).json({
+                ok: true,
+                text: `Hello ${data}`,
+                error: "",
+            });
+        }
     });
 
     return app;
