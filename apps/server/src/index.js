@@ -55,7 +55,7 @@ const createApp = (corsOrigin) => {
         const { data } = req.body;
 
         if (!data) {
-            res.status(500).json({
+            res.status(400).json({
                 ok: false,
                 text: "",
                 error: "gime input!",
@@ -95,10 +95,10 @@ const createApp = (corsOrigin) => {
                 createdAt: Date.now(),
             });
 
-            res.status(200).json({
+            res.status(201).json({
                 ok: true,
                 message: "Data Added!",
-                tasks: tasks,
+                task: tasks[tasks.length - 1],
             });
         }
     });
@@ -111,7 +111,9 @@ const createApp = (corsOrigin) => {
         // console.log("id >> ", id);
 
         if (!id) {
-            res.status(400).json({ ok: false, message: "id is broken sir" });
+            return res
+                .status(400)
+                .json({ ok: false, message: "id is broken sir" });
         }
 
         const selectedTask = tasks.find((t) => t.id === Number(id - 1));
@@ -126,7 +128,7 @@ const createApp = (corsOrigin) => {
             });
         } else {
             res.status(404).json({
-                ok: true,
+                ok: false,
                 task: "",
                 findTask: false,
                 message: "Task not found :(",

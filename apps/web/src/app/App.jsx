@@ -7,7 +7,7 @@ const App = () => {
     const [inputValue, setInputValue] = useState("");
     const [newTaskValue, setNewTaskValue] = useState("");
     const [searchTasksValue, setSearchTasksValue] = useState("");
-    const [searchedTask, setSearchedTask] = useState("");
+    const [searchedTask, setSearchedTask] = useState({});
     const [tasks, setTasks] = useState([]);
 
     const getData = async () => {
@@ -85,7 +85,7 @@ const App = () => {
             const res = await axios.get(`/api/tasks/${searchTasksValue}`);
 
             if (res?.data && res?.data?.ok && res?.data?.findTask) {
-                setSearchedTask({ title: res.data.task.title, id: searchTasksValue });
+                setSearchedTask({ title: res.data.task.title, id: res.data.task.id });
             }
         } catch (error) {
             errorHandler(error);
@@ -117,7 +117,7 @@ const App = () => {
             <h2>Tasks</h2>
 
             {tasks.map((task, index) => (
-                <div key={index}>
+                <div key={task.id}>
                     {index + 1}. {task.title}
                 </div>
             ))}
