@@ -1,1 +1,9 @@
-npm run format:check
+#!/usr/bin/env sh
+
+set -e
+
+if [ -f "apps/web/package.json" ]; then
+    npm --prefix apps/web run lint
+else
+    echo "apps/web/package.json not found; skipping pre-commit lint."
+fi
