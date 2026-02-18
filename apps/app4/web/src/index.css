@@ -1,0 +1,19 @@
+body {
+    background: #222;
+    color: white;
+    text-align: center;
+    font-size: 24px;
+}
+
+.items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 20px;
+    cursor: pointer;
+}
