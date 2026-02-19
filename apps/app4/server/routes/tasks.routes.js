@@ -17,8 +17,40 @@ const {
     deleteTask,
 } = require("../controllers/tasks.controller");
 
+/**
+ * @swagger
+ * /api/tasks:
+ *   get:
+ *     summary: Get all tasks
+ *     responses:
+ *       200:
+ *         description: List of tasks
+ */
 router.get("/tasks", getAllTasks);
 
+/**
+ * @swagger
+ * /api/tasks:
+ *   post:
+ *     summary: Create task
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               data:
+ *                 type: object
+ *                 properties:
+ *                   title:
+ *                     type: string
+ *                   done:
+ *                     type: boolean
+ *     responses:
+ *       201:
+ *         description: Created
+ */
 router.post("/tasks", validate(createTaskSchema), createTask);
 
 router.get("/tasks/:id", validate(getByIdSchema), getTaskById);

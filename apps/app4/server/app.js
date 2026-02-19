@@ -1,6 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 
+const swaggerUi = require("swagger-ui-express");
+const { swaggerSpec } = require("./swagger");
+
 const { tasksRouter } = require("./routes/tasks.routes");
 const { errorMiddleware } = require("./middlewares/error.middleware");
 
@@ -10,6 +13,7 @@ function createApp() {
     app.use(express.json());
     app.use(cors({ origin: process.env.CORS_ORIGIN }));
 
+    app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
     app.use("/api", tasksRouter);
 
     // 404 fallback
